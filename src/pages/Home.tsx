@@ -1,0 +1,219 @@
+
+import React, { useEffect, useState, useRef } from 'react';
+import { ArrowDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import ParticlesBackground from '@/components/ParticlesBackground';
+
+const TypewriterText = ({ text }: { text: string }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
+
+  useEffect(() => {
+    if (currentIndex < text.length && isTyping) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 100);
+      
+      return () => clearTimeout(timeout);
+    } else if (currentIndex >= text.length) {
+      setIsTyping(false);
+    }
+  }, [currentIndex, text, isTyping]);
+
+  return (
+    <div className="relative">
+      <span className="text-xl md:text-2xl font-light">
+        {displayText}
+        <span className={`inline-block w-1 h-6 bg-purple ml-1 ${isTyping ? 'animate-blink' : 'opacity-0'}`}></span>
+      </span>
+    </div>
+  );
+};
+
+const Hero = () => {
+  const scrollToNextSection = () => {
+    const nextSection = document.getElementById('about-preview');
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center px-4">
+      <ParticlesBackground />
+      
+      <div className="container max-w-4xl mx-auto text-center z-10">
+        <div className="animate-fade-in">
+          <div className="mb-6 w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mx-auto border-4 border-purple animate-float shadow-xl">
+            <img 
+              src="https://images.unsplash.com/photo-1633356122544-f134324a6cee" 
+              alt="Developer Profile" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
+            John <span className="text-purple">Doe</span>
+          </h1>
+          
+          <h2 className="text-2xl md:text-3xl font-medium mb-6">
+            Full Stack Web Developer
+          </h2>
+          
+          <div className="mb-10 h-16">
+            <TypewriterText text="Building elegant web solutions with modern technologies." />
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <Button asChild className="bg-purple hover:bg-purple-light">
+              <Link to="/contact">Get In Touch</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/projects">View Projects</Link>
+            </Button>
+          </div>
+        </div>
+        
+        <div 
+          onClick={scrollToNextSection}
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer animate-bounce"
+        >
+          <ArrowDown className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+          <span className="sr-only">Scroll Down</span>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const AboutPreview = () => {
+  return (
+    <section id="about-preview" className="py-20 px-4">
+      <div className="container mx-auto max-w-4xl">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
+          <div className="w-20 h-1 bg-purple mx-auto"></div>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 animate-fade-in">
+            <p className="text-lg">
+              I'm a passionate Full Stack Developer with expertise in building modern web applications using React, Node.js, and other cutting-edge technologies.
+            </p>
+            <p>
+              With 5+ years of professional experience, I enjoy crafting user-friendly interfaces and scalable backend solutions for clients ranging from startups to enterprise companies.
+            </p>
+            <Button asChild>
+              <Link to="/about">Learn More About Me</Link>
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-3 gap-4">
+            {['React', 'Node.js', 'TypeScript', 'MongoDB', 'AWS', 'GraphQL'].map((tech) => (
+              <div key={tech} className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center transform hover:scale-105 transition-transform card-hover">
+                <span className="block text-purple font-medium">{tech}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ProjectsPreview = () => {
+  const projects = [
+    {
+      id: 1,
+      title: 'E-Commerce Platform',
+      description: 'A full-featured online store with payment processing',
+      image: 'https://images.unsplash.com/photo-1661956602868-6ae368943878',
+      tech: ['React', 'Node.js', 'MongoDB']
+    },
+    {
+      id: 2,
+      title: 'Task Management App',
+      description: 'Collaborative task tracking application with real-time updates',
+      image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b',
+      tech: ['React', 'Firebase', 'Tailwind']
+    }
+  ];
+  
+  return (
+    <section className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Recent Projects</h2>
+          <div className="w-20 h-1 bg-purple mx-auto"></div>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-10">
+          {projects.map((project) => (
+            <div key={project.id} className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">{project.description}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tech.map((tech) => (
+                    <span key={tech} className="bg-purple/10 text-purple px-2 py-1 rounded text-sm">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/projects">View Details</Link>
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="text-center mt-12">
+          <Button asChild>
+            <Link to="/projects">View All Projects</Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ContactPreview = () => {
+  return (
+    <section className="py-20 px-4">
+      <div className="container mx-auto max-w-4xl text-center">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">Let's Work Together</h2>
+        <div className="w-20 h-1 bg-purple mx-auto mb-6"></div>
+        <p className="max-w-lg mx-auto mb-8">
+          Have a project in mind or want to discuss potential opportunities? I'm always open to new challenges and collaborations.
+        </p>
+        <Button size="lg" asChild className="bg-purple hover:bg-purple-light">
+          <Link to="/contact">Get In Touch</Link>
+        </Button>
+      </div>
+    </section>
+  );
+};
+
+const Home = () => {
+  return (
+    <div>
+      <Hero />
+      <AboutPreview />
+      <ProjectsPreview />
+      <ContactPreview />
+    </div>
+  );
+};
+
+export default Home;
