@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import HomeImg from '../Img/Home1.jpg';
 import ParticlesBackground from '@/components/ParticlesBackground';
 
 const TypewriterText = ({ text }: { text: string }) => {
@@ -49,7 +50,7 @@ const Hero = () => {
         <div className="animate-fade-in">
           <div className="mb-6 w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mx-auto border-4 border-purple animate-float shadow-xl">
             <img 
-              src="https://images.unsplash.com/photo-1633356122544-f134324a6cee" 
+              src={HomeImg}
               alt="Developer Profile" 
               className="w-full h-full object-cover"
             />
