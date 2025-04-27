@@ -14,7 +14,7 @@ const Footer = () => {
           </div>
           <div className="flex space-x-6">
             <a 
-              href="https://github.com" 
+              href="https://github.com/abhay707" 
               target="_blank" 
               rel="noopener noreferrer"
               className="social-icon"
@@ -23,7 +23,7 @@ const Footer = () => {
               <Github size={20} />
             </a>
             <a 
-              href="https://linkedin.com" 
+              href="https://www.linkedin.com/in/abhay-chaturvedi7/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="social-icon"
@@ -41,7 +41,7 @@ const Footer = () => {
               <Twitter size={20} />
             </a>
             <a 
-              href="mailto:contact@example.com" 
+              href="mailto:abhx1437@gmail.com" 
               className="social-icon"
               aria-label="Email"
             >

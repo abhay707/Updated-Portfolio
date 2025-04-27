@@ -103,7 +103,7 @@ const About = () => {
     { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
     { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
     { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
-    { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg' },
+    { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg'},
     { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
     { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' }
   ];
@@ -128,15 +128,15 @@ const About = () => {
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-purple rounded-full flex items-center justify-center animate-pulse-slow">
-                <span className="text-white font-bold">5+ Years</span>
+                <span className="text-white font-bold">2+ Years</span>
               </div>
             </div>
             
             <div className="space-y-4 animate-fade-in-right">
-              <h2 className="text-2xl font-bold">John Doe</h2>
+              <h2 className="text-2xl font-bold">Abhay Chaturvedi</h2>
               <h3 className="text-xl text-purple">Full Stack Web Developer</h3>
               <p className="text-gray-600 dark:text-gray-300">
-                I'm a dedicated Full Stack Developer with over 5 years of professional experience building web applications. 
+                I'm a dedicated Full Stack Developer with over 2 years of professional experience building web applications. 
                 I specialize in React, Node.js, and TypeScript to create responsive and performant web experiences.
               </p>
               <p className="text-gray-600 dark:text-gray-300">
@@ -145,10 +145,10 @@ const About = () => {
               </p>
               
               <div className="grid grid-cols-2 gap-4 text-sm mt-4">
-                <div><span className="font-medium">Name:</span> John Doe</div>
-                <div><span className="font-medium">Email:</span> john@example.com</div>
-                <div><span className="font-medium">Location:</span> San Francisco, CA</div>
-                <div><span className="font-medium">Degree:</span> B.S. Computer Science</div>
+                <div><span className="font-medium">Name:</span> Abhay Chaturvedi</div>
+                <div><span className="font-medium">Email:</span> abhx1437@gmail.com</div>
+                <div><span className="font-medium">Location:</span> Punjab, India</div>
+                <div><span className="font-medium">Degree:</span> B.Tech Computer Science</div>
               </div>
               
               <div className="pt-4">
@@ -202,7 +202,6 @@ const About = () => {
             <h3 className="text-xl font-bold mb-4">Fun Fact</h3>
             <p className="text-gray-700 dark:text-gray-300">
               When I'm not coding, you can find me hiking in the mountains or experimenting with new coffee brewing techniques.
-              I've visited over 20 countries and can speak three languages fluently!
             </p>
           </div>
         </div>

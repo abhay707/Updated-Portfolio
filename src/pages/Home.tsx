@@ -56,7 +56,7 @@ const Hero = () => {
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
-            John <span className="text-purple">Doe</span>
+            Abhay <span className="text-purple">Chaturvedi</span>
           </h1>
           
           <h2 className="text-2xl md:text-3xl font-medium mb-6">

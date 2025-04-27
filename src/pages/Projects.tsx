@@ -10,7 +10,7 @@ interface Project {
   description: string;
   image: string;
   tech: string[];
-  category: 'frontend' | 'backend' | 'fullstack';
+  category: 'frontend' | 'backend' | 'fullstack' | 'other';
   github: string;
   demo: string;
 }
