@@ -1,10 +1,10 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import HomeImg from '../Img/Home1.jpg';
-import ParticlesBackground from '@/components/ParticlesBackground';
+import PageTransition from '@/components/PageTransition';
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
@@ -43,48 +43,88 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4">
-      <ParticlesBackground />
-      
+    <section className="relative min-h-screen flex items-center justify-center px-4">      
       <div className="container max-w-4xl mx-auto text-center z-10">
-        <div className="animate-fade-in">
-          <div className="mb-6 w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mx-auto border-4 border-purple animate-float shadow-xl">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div 
+            className="mb-6 w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mx-auto border-4 border-purple shadow-xl"
+            animate={{ 
+              y: [0, -20, 0],
+              boxShadow: [
+                "0 10px 15px -3px rgba(110, 89, 165, 0.3)",
+                "0 15px 25px -5px rgba(110, 89, 165, 0.5)",
+                "0 10px 15px -3px rgba(110, 89, 165, 0.3)"
+              ]
+            }}
+            transition={{ 
+              duration: 6, 
+              ease: "easeInOut",
+              repeat: Infinity, 
+              repeatType: "reverse" 
+            }}
+          >
             <img 
               src={HomeImg}
               alt="Developer Profile" 
               className="w-full h-full object-cover"
             />
-          </div>
+          </motion.div>
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
+          <motion.h1 
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             Abhay <span className="text-purple">Chaturvedi</span>
-          </h1>
+          </motion.h1>
           
-          <h2 className="text-2xl md:text-3xl font-medium mb-6">
+          <motion.h2 
+            className="text-2xl md:text-3xl font-medium mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
             Full Stack Web Developer
-          </h2>
+          </motion.h2>
           
-          <div className="mb-10 h-16">
+          <motion.div 
+            className="mb-10 h-16"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
             <TypewriterText text="Building elegant web solutions with modern technologies." />
-          </div>
+          </motion.div>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
             <Button asChild className="bg-purple hover:bg-purple-light">
               <Link to="/contact">Get In Touch</Link>
             </Button>
             <Button variant="outline" asChild>
               <Link to="/projects">View Projects</Link>
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
         
-        <div 
+        <motion.div 
           onClick={scrollToNextSection}
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer animate-bounce"
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
         >
           <ArrowDown className="w-6 h-6 text-gray-600 dark:text-gray-300" />
           <span className="sr-only">Scroll Down</span>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -94,13 +134,25 @@ const AboutPreview = () => {
   return (
     <section id="about-preview" className="py-20 px-4">
       <div className="container mx-auto max-w-4xl">
-        <div className="text-center mb-12">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
           <div className="w-20 h-1 bg-purple mx-auto"></div>
-        </div>
+        </motion.div>
         
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 animate-fade-in">
+          <motion.div 
+            className="space-y-6"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <p className="text-lg">
               I'm a passionate Full Stack Developer with expertise in building modern web applications using React, Node.js, and other cutting-edge technologies.
             </p>
@@ -110,15 +162,29 @@ const AboutPreview = () => {
             <Button asChild>
               <Link to="/about">Learn More About Me</Link>
             </Button>
-          </div>
+          </motion.div>
           
-          <div className="grid grid-cols-3 gap-4">
-            {['React', 'Node.js', 'TypeScript', 'MongoDB', 'AWS', 'GraphQL'].map((tech) => (
-              <div key={tech} className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center transform hover:scale-105 transition-transform card-hover">
+          <motion.div 
+            className="grid grid-cols-3 gap-4"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            {['React', 'Node.js', 'TypeScript', 'MongoDB', 'AWS', 'GraphQL'].map((tech, index) => (
+              <motion.div 
+                key={tech} 
+                className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center transform hover:scale-105 transition-transform card-hover"
+                whileHover={{ scale: 1.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.1 * index }}
+              >
                 <span className="block text-purple font-medium">{tech}</span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -208,12 +274,12 @@ const ContactPreview = () => {
 
 const Home = () => {
   return (
-    <div>
+    <PageTransition background="particles" density={120}>
       <Hero />
       <AboutPreview />
       <ProjectsPreview />
       <ContactPreview />
-    </div>
+    </PageTransition>
   );
 };
 
