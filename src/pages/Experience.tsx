@@ -15,60 +15,22 @@ const Experience = () => {
   const timelineData: TimelineItem[] = [
     {
       id: 1,
-      title: 'Senior Full Stack Developer',
-      organization: 'Tech Innovations Inc.',
-      date: 'Jan 2022 - Present',
+      title: 'Robotic Programming Intern',
+      organization: 'Moonpreneur',
+      date: 'Feb 2025 - Present',
       description: [
-        'Lead a team of 5 developers to build and maintain multiple client projects',
-        'Architected and implemented a scalable e-commerce platform serving over 100K monthly users',
-        'Improved application performance by 40% through code optimization and database restructuring',
-        'Implemented CI/CD pipeline reducing deployment time by 60%'
+        'Work as robotic programming intern',
+        'Developed a robotic arm using Arduino and Python',
+        'Collaborated with a team to design and implement robotic solutions',
+        'Conducted research on advanced robotic technologies'
       ],
       type: 'work'
     },
     {
       id: 2,
-      title: 'Full Stack Developer',
-      organization: 'Digital Solutions LLC',
-      date: 'Jun 2019 - Dec 2021',
-      description: [
-        'Developed responsive web applications using React.js and Node.js',
-        'Designed and implemented RESTful APIs and GraphQL endpoints',
-        'Collaborated with UX/UI designers to implement user-friendly interfaces',
-        'Participated in agile development processes and sprint planning'
-      ],
-      type: 'work'
-    },
-    {
-      id: 3,
-      title: 'Frontend Developer',
-      organization: 'WebCraft Studios',
-      date: 'Aug 2017 - May 2019',
-      description: [
-        'Created responsive and interactive user interfaces using JavaScript and CSS',
-        'Worked with design team to translate mockups into functional web pages',
-        'Optimized website performance and accessibility',
-        'Implemented tracking and analytics features'
-      ],
-      type: 'work'
-    },
-    {
-      id: 4,
-      title: 'Master of Computer Science',
-      organization: 'Tech University',
-      date: '2015 - 2017',
-      description: [
-        'Specialized in Web Technologies and Distributed Systems',
-        'Graduated with distinction (3.9 GPA)',
-        'Thesis: "Performance Optimization Techniques for Modern Web Applications"'
-      ],
-      type: 'education'
-    },
-    {
-      id: 5,
       title: 'Bachelor of Science in Computer Science',
-      organization: 'State University',
-      date: '2011 - 2015',
+      organization: 'Lovely Professional Univeristy',
+      date: '2022 - 2026',
       description: [
         'Focused on Software Engineering and Database Systems',
         'Dean\'s List for all semesters',
