@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { ExternalLink, Github, Trash, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +24,20 @@ interface Project {
   user_id: string;
 }
 
+interface SupabaseProject {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string | null;
+  tech_stack: string[];
+  github_url: string | null;
+  demo_url: string | null;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+  featured: boolean | null;
+}
+
 const defaultImage = "https://images.unsplash.com/photo-1555066931-4365d14bab8c";
 
 const ProjectCard: React.FC<{ project: Project, onDelete?: () => void, isEditable?: boolean }> = ({ 
@@ -40,7 +53,14 @@ const ProjectCard: React.FC<{ project: Project, onDelete?: () => void, isEditabl
     try {
       const { error } = await supabase
         .from('projects')
-        .update(editedProject)
+        .update({
+          title: editedProject.title,
+          description: editedProject.description,
+          image_url: editedProject.image_url,
+          github_url: editedProject.github_url,
+          demo_url: editedProject.demo_url,
+          tech_stack: editedProject.tech_stack
+        })
         .eq('id', project.id);
 
       if (error) throw error;
@@ -241,7 +261,26 @@ const Projects = () => {
       
       if (error) throw error;
       
-      setProjects(data as Project[]);
+      // Transform the data to match our Project interface
+      const transformedData: Project[] = (data as SupabaseProject[]).map(project => ({
+        ...project,
+        category: (project.tech_stack && Array.isArray(project.tech_stack) && 
+                 project.tech_stack.some(tech => 
+                   ['react', 'vue', 'angular', 'html', 'css'].includes(tech.toLowerCase())
+                 )) ? 'frontend' :
+                 (project.tech_stack && Array.isArray(project.tech_stack) && 
+                 project.tech_stack.some(tech => 
+                   ['node', 'express', 'django', 'flask', 'php'].includes(tech.toLowerCase())
+                 )) ? 'backend' :
+                 (project.tech_stack && Array.isArray(project.tech_stack) && 
+                 project.tech_stack.some(tech => 
+                   ['react', 'vue', 'angular'].includes(tech.toLowerCase())) && 
+                 project.tech_stack.some(tech => 
+                   ['node', 'express', 'django', 'flask', 'php'].includes(tech.toLowerCase())
+                 )) ? 'fullstack' : 'other'
+      }));
+      
+      setProjects(transformedData);
     } catch (error) {
       console.error('Error fetching projects:', error);
       toast.error('Failed to load projects');
@@ -254,17 +293,25 @@ const Projects = () => {
     if (!user) return;
     
     try {
+      const projectToAdd = {
+        ...newProject,
+        user_id: user.id
+      };
+      
       const { data, error } = await supabase
         .from('projects')
-        .insert({
-          ...newProject,
-          user_id: user.id
-        })
+        .insert(projectToAdd)
         .select();
       
       if (error) throw error;
       
-      setProjects([...projects, data[0] as Project]);
+      // Transform the returned project data to match our Project interface
+      const addedProject: Project = {
+        ...(data[0] as SupabaseProject),
+        category: newProject.category
+      };
+      
+      setProjects([...projects, addedProject]);
       setIsDialogOpen(false);
       resetNewProject();
       toast.success('Project added successfully');
