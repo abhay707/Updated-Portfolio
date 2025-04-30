@@ -1,15 +1,26 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Moon, Sun, Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Moon, Sun, Menu, X, LogIn, LogOut, User } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useTheme } from '@/components/ThemeProvider';
+import { useAuth } from '@/components/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { toast } from 'sonner';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +50,18 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      toast.success('Logged out successfully');
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      toast.error('Failed to log out');
+    }
+  };
+
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
@@ -62,15 +85,45 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="ml-2"
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
+
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="ml-2"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </Button>
+
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="gap-2">
+                      <User className="h-4 w-4" />
+                      Account
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem 
+                      className="cursor-pointer"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button variant="outline" asChild>
+                  <Link to="/auth" className="flex items-center gap-2">
+                    <LogIn className="h-4 w-4" />
+                    Sign In
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Mobile Navigation Trigger */}
@@ -114,6 +167,31 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
+
+          {user ? (
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                handleLogout();
+                setIsMenuOpen(false);
+              }}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </Button>
+          ) : (
+            <Link
+              to="/auth"
+              className="flex items-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Button variant="outline" className="flex items-center gap-2">
+                <LogIn className="h-4 w-4" />
+                Sign In
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </nav>

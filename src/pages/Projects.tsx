@@ -1,179 +1,314 @@
-import React, { useState } from "react";
-import { ExternalLink, Github } from "lucide-react";
+
+import React, { useState, useEffect } from "react";
+import { ExternalLink, Github, Trash, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Pong from "../Img/Projects/Pong.jpg";
-import FitnessApp from "../Img/Projects/Fitness.jpg";
-import Event from "../Img/Projects/Event.jpg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/components/AuthProvider';
+import AdminPanel from "@/components/AdminPanel";
+import AdminEditable from "@/components/AdminEditable";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface Project {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  image: string;
-  tech: string[];
+  image_url: string | null;
+  tech_stack: string[];
   category: "frontend" | "backend" | "fullstack" | "other";
-  github: string;
-  demo: string;
+  github_url: string | null;
+  demo_url: string | null;
+  user_id: string;
 }
 
-const projectsData: Project[] = [
-  {
-    id: 1,
-    title: "E-Commerce Platform",
-    description:
-      "A full-featured online shopping platform with payment processing, user authentication, and admin dashboard.",
-    image: "https://images.unsplash.com/photo-1661956602868-6ae368943878",
-    tech: ["React", "Node.js", "Express", "MongoDB", "Stripe API"],
-    category: "fullstack",
-    github: "https://github.com",
-    demo: "https://example.com",
-  },
-  {
-    id: 2,
-    title: "Task Management App",
-    description:
-      "Collaborative task tracking application with real-time updates, user assignments and progress tracking.",
-    image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b",
-    tech: ["React", "Firebase", "Tailwind CSS", "React DnD"],
-    category: "frontend",
-    github: "https://github.com/abhay707/Notes-app.git",
-    demo: "https://notes-app-beige-three.vercel.app/",
-  },
-  {
-    id: 3,
-    title: "Social Media Dashboard",
-    description:
-      "Analytics dashboard for tracking social media metrics across multiple platforms with data visualization.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
-    tech: ["Vue.js", "Vuex", "Chart.js", "SCSS"],
-    category: "frontend",
-    github: "https://github.com",
-    demo: "https://example.com",
-  },
-  {
-    id: 4,
-    title: "RESTful API Service",
-    description:
-      "High-performance API service with authentication, rate limiting, and comprehensive documentation.",
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31",
-    tech: ["Node.js", "Express", "PostgreSQL", "JWT", "Swagger"],
-    category: "backend",
-    github: "https://github.com",
-    demo: "https://example.com",
-  },
-  {
-    id: 5,
-    title: "Event Management System",
-    description:
-      "A platform to organize, manage, and track events with user registration, event scheduling, and real-time updates.",
-    image: Event,
-    tech: ["PHP", "MySQL", "TypeScript"],
-    category: "fullstack",
-    github: "https://github.com",
-    demo: "https://example.com",
-  },
-  {
-    id: 6,
-    title: "Content Management System",
-    description:
-      "Custom CMS with role-based access control, media management, and publishing workflow.",
-    image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9",
-    tech: ["React", "GraphQL", "Node.js", "PostgreSQL"],
-    category: "fullstack",
-    github: "https://github.com",
-    demo: "https://example.com",
-  },
-  {
-    id: 7,
-    title: "Retro Pong Game",
-    description:
-      "A classic Pong game built with HTML5 Canvas and JavaScript, featuring multiplayer mode.",
-    image: Pong,
-    tech: ["Javascript", "HTML5", "CSS3"],
-    category: "frontend",
-    github: "https://github.com/abhay707/Retro-pong-game.git",
-    demo: "https://retro-pong-games.netlify.app/",
-  },
-  {
-    id: 8,
-    title: "Fitness Companion App",
-    description:
-      "A fitness tracking app built with React and Tailwind CSS, featuring a smart chatbot for personalized guidance.",
-    image: FitnessApp,
-    tech: ["React", "Tailwind CSS", "TypeScript", "Chatbot Integration"],
-    category: "frontend",
-    github: "https://github.com/abhay707/Fit_Labs.git",
-    demo: "https://fit-labs.vercel.app/",
-  },
-];
+const defaultImage = "https://images.unsplash.com/photo-1555066931-4365d14bab8c";
 
-const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+const ProjectCard: React.FC<{ project: Project, onDelete?: () => void, isEditable?: boolean }> = ({ 
+  project, 
+  onDelete,
+  isEditable = false 
+}) => {
+  const { user } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedProject, setEditedProject] = useState(project);
+
+  const handleSave = async () => {
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .update(editedProject)
+        .eq('id', project.id);
+
+      if (error) throw error;
+      toast.success("Project updated successfully");
+      return Promise.resolve();
+    } catch (error) {
+      console.error("Error updating project:", error);
+      toast.error("Failed to update project");
+      return Promise.reject(error);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditedProject(project);
+    setIsEditing(false);
+  };
+
+  if (isEditing) {
+    return (
+      <AdminEditable
+        onSave={handleSave}
+        onCancel={handleCancel}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+      >
+        <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md group transition-shadow duration-300 p-4">
+          <div className="mb-4">
+            <Label>Title</Label>
+            <Input 
+              value={editedProject.title} 
+              onChange={(e) => setEditedProject({...editedProject, title: e.target.value})} 
+              className="mb-2"
+            />
+            
+            <Label>Description</Label>
+            <Textarea 
+              value={editedProject.description} 
+              onChange={(e) => setEditedProject({...editedProject, description: e.target.value})} 
+              className="mb-2"
+              rows={3}
+            />
+            
+            <Label>Image URL</Label>
+            <Input 
+              value={editedProject.image_url || ''} 
+              onChange={(e) => setEditedProject({...editedProject, image_url: e.target.value})} 
+              className="mb-2"
+            />
+            
+            <Label>GitHub URL</Label>
+            <Input 
+              value={editedProject.github_url || ''} 
+              onChange={(e) => setEditedProject({...editedProject, github_url: e.target.value})} 
+              className="mb-2"
+            />
+            
+            <Label>Demo URL</Label>
+            <Input 
+              value={editedProject.demo_url || ''} 
+              onChange={(e) => setEditedProject({...editedProject, demo_url: e.target.value})} 
+              className="mb-2"
+            />
+            
+            <Label>Category</Label>
+            <select 
+              value={editedProject.category} 
+              onChange={(e) => setEditedProject({...editedProject, category: e.target.value as any})}
+              className="w-full p-2 border rounded mb-2 bg-background"
+            >
+              <option value="frontend">Frontend</option>
+              <option value="backend">Backend</option>
+              <option value="fullstack">Fullstack</option>
+              <option value="other">Other</option>
+            </select>
+            
+            <Label>Technologies (comma separated)</Label>
+            <Input 
+              value={editedProject.tech_stack?.join(', ') || ''} 
+              onChange={(e) => setEditedProject({
+                ...editedProject, 
+                tech_stack: e.target.value.split(',').map(tech => tech.trim()).filter(Boolean)
+              })} 
+              className="mb-2"
+            />
+          </div>
+
+          {user && onDelete && (
+            <Button variant="destructive" size="sm" onClick={onDelete}>
+              <Trash className="w-4 h-4 mr-1" /> Delete
+            </Button>
+          )}
+        </div>
+      </AdminEditable>
+    );
+  }
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md group hover:shadow-xl transition-shadow duration-300 animate-fade-in">
-      <div className="h-56 overflow-hidden relative">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
+    <AdminEditable
+      onSave={handleSave}
+      onCancel={handleCancel}
+      isEditing={isEditing}
+      setIsEditing={setIsEditing}
+    >
+      <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md group hover:shadow-xl transition-shadow duration-300 animate-fade-in">
+        <div className="h-56 overflow-hidden relative">
+          <img
+            src={project.image_url || defaultImage}
+            alt={project.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-          <div className="flex gap-2">
-            <Button size="sm" variant="secondary" asChild>
-              <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="mr-1 h-4 w-4" />
-                Live Demo
-              </a>
-            </Button>
-            <Button size="sm" variant="outline" asChild>
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+            <div className="flex gap-2">
+              {project.demo_url && (
+                <Button size="sm" variant="secondary" asChild>
+                  <a href={project.demo_url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="mr-1 h-4 w-4" />
+                    Live Demo
+                  </a>
+                </Button>
+              )}
+              {project.github_url && (
+                <Button size="sm" variant="outline" asChild>
+                  <a
+                    href={project.github_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Github className="mr-1 h-4 w-4" />
+                    Code
+                  </a>
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+            {project.description}
+          </p>
+
+          <div className="flex flex-wrap gap-2 mb-2">
+            {project.tech_stack?.map((tech) => (
+              <span
+                key={tech}
+                className="bg-purple/10 text-purple px-2 py-1 rounded text-xs"
               >
-                <Github className="mr-1 h-4 w-4" />
-                Code
-              </a>
-            </Button>
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-4 flex justify-between items-center text-gray-500">
+            <span className="text-xs capitalize bg-gray-100 dark:bg-gray-700 py-1 px-2 rounded">
+              {project.category}
+            </span>
+            {user && isEditable && onDelete && (
+              <Button variant="destructive" size="sm" onClick={onDelete}>
+                <Trash className="w-4 h-4" />
+              </Button>
+            )}
           </div>
         </div>
       </div>
-
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-          {project.description}
-        </p>
-
-        <div className="flex flex-wrap gap-2 mb-2">
-          {project.tech.map((tech) => (
-            <span
-              key={tech}
-              className="bg-purple/10 text-purple px-2 py-1 rounded text-xs"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-4 flex justify-between items-center text-gray-500">
-          <span className="text-xs capitalize bg-gray-100 dark:bg-gray-700 py-1 px-2 rounded">
-            {project.category}
-          </span>
-        </div>
-      </div>
-    </div>
+    </AdminEditable>
   );
 };
 
 const Projects = () => {
   const [activeTab, setActiveTab] = useState<string>("all");
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { user } = useAuth();
+  
+  const [newProject, setNewProject] = useState<Omit<Project, 'id' | 'user_id'>>({
+    title: '',
+    description: '',
+    image_url: '',
+    tech_stack: [],
+    category: 'frontend',
+    github_url: '',
+    demo_url: ''
+  });
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*');
+      
+      if (error) throw error;
+      
+      setProjects(data as Project[]);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      toast.error('Failed to load projects');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddProject = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .insert({
+          ...newProject,
+          user_id: user.id
+        })
+        .select();
+      
+      if (error) throw error;
+      
+      setProjects([...projects, data[0] as Project]);
+      setIsDialogOpen(false);
+      resetNewProject();
+      toast.success('Project added successfully');
+    } catch (error) {
+      console.error('Error adding project:', error);
+      toast.error('Failed to add project');
+    }
+  };
+
+  const handleDeleteProject = async (id: string) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      setProjects(projects.filter(project => project.id !== id));
+      toast.success('Project deleted successfully');
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      toast.error('Failed to delete project');
+    }
+  };
+
+  const resetNewProject = () => {
+    setNewProject({
+      title: '',
+      description: '',
+      image_url: '',
+      tech_stack: [],
+      category: 'frontend',
+      github_url: '',
+      demo_url: ''
+    });
+  };
 
   const filteredProjects =
     activeTab === "all"
-      ? projectsData
-      : projectsData.filter((project) => project.category === activeTab);
+      ? projects
+      : projects.filter((project) => project.category === activeTab);
 
   return (
     <div className="pt-24 pb-16">
@@ -188,6 +323,13 @@ const Projects = () => {
             </p>
           </div>
 
+          {user && (
+            <AdminPanel 
+              section="projects" 
+              onAdd={() => setIsDialogOpen(true)}
+            />
+          )}
+
           <Tabs
             defaultValue="all"
             className="mb-12"
@@ -200,52 +342,143 @@ const Projects = () => {
                 <TabsTrigger value="frontend">Frontend</TabsTrigger>
                 <TabsTrigger value="backend">Backend</TabsTrigger>
                 <TabsTrigger value="fullstack">Full Stack</TabsTrigger>
-                <TabsTrigger value="others">Others</TabsTrigger>
+                <TabsTrigger value="other">Others</TabsTrigger>
               </TabsList>
             </div>
 
             <TabsContent value="all" className="animate-fade-in">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProjects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
+              {isLoading ? (
+                <div className="text-center py-10">Loading projects...</div>
+              ) : filteredProjects.length === 0 ? (
+                <div className="text-center py-10">No projects found</div>
+              ) : (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredProjects.map((project) => (
+                    <ProjectCard 
+                      key={project.id} 
+                      project={project} 
+                      onDelete={() => handleDeleteProject(project.id)}
+                      isEditable={true}
+                    />
+                  ))}
+                </div>
+              )}
             </TabsContent>
 
-            <TabsContent value="frontend" className="animate-fade-in">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProjects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="backend" className="animate-fade-in">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProjects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="fullstack" className="animate-fade-in">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProjects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="others" className="animate-fade-in">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProjects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
-            </TabsContent>
+            {["frontend", "backend", "fullstack", "other"].map((category) => (
+              <TabsContent key={category} value={category} className="animate-fade-in">
+                {isLoading ? (
+                  <div className="text-center py-10">Loading projects...</div>
+                ) : filteredProjects.length === 0 ? (
+                  <div className="text-center py-10">No {category} projects found</div>
+                ) : (
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredProjects.map((project) => (
+                      <ProjectCard 
+                        key={project.id} 
+                        project={project} 
+                        onDelete={() => handleDeleteProject(project.id)}
+                        isEditable={true}
+                      />
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+            ))}
           </Tabs>
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Add New Project</DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="title">Project Title</Label>
+              <Input 
+                id="title" 
+                value={newProject.title} 
+                onChange={(e) => setNewProject({...newProject, title: e.target.value})} 
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea 
+                id="description" 
+                value={newProject.description} 
+                onChange={(e) => setNewProject({...newProject, description: e.target.value})} 
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="image_url">Image URL</Label>
+                <Input 
+                  id="image_url" 
+                  value={newProject.image_url || ''} 
+                  onChange={(e) => setNewProject({...newProject, image_url: e.target.value})} 
+                />
+              </div>
+              
+              <div className="grid gap-2">
+                <Label htmlFor="category">Category</Label>
+                <select 
+                  id="category"
+                  value={newProject.category} 
+                  onChange={(e) => setNewProject({...newProject, category: e.target.value as any})}
+                  className="w-full p-2 border rounded bg-background"
+                >
+                  <option value="frontend">Frontend</option>
+                  <option value="backend">Backend</option>
+                  <option value="fullstack">Fullstack</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="github_url">GitHub URL</Label>
+                <Input 
+                  id="github_url" 
+                  value={newProject.github_url || ''} 
+                  onChange={(e) => setNewProject({...newProject, github_url: e.target.value})} 
+                />
+              </div>
+              
+              <div className="grid gap-2">
+                <Label htmlFor="demo_url">Demo URL</Label>
+                <Input 
+                  id="demo_url" 
+                  value={newProject.demo_url || ''} 
+                  onChange={(e) => setNewProject({...newProject, demo_url: e.target.value})} 
+                />
+              </div>
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="tech_stack">Technologies (comma separated)</Label>
+              <Input 
+                id="tech_stack" 
+                value={newProject.tech_stack?.join(', ') || ''} 
+                onChange={(e) => setNewProject({
+                  ...newProject, 
+                  tech_stack: e.target.value.split(',').map(tech => tech.trim()).filter(Boolean)
+                })} 
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleAddProject}>Add Project</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
