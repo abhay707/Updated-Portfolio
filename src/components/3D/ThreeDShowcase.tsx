@@ -3,12 +3,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ThreeDModel from './ThreeDModel';
 
+// Updated models with fallbacks
 const MODELS = [
   {
     id: 'laptop',
     name: 'Developer Laptop',
     description: 'Interactive 3D model of a development workstation',
-    path: 'https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/macbook/model.gltf',
+    path: '/models/laptop.glb', // Local path (this is a placeholder, will use fallback)
+    fallbackShape: 'box' as const,
     scale: 0.4,
     position: [0, -0.5, 0] as [number, number, number],
     bgColor: 'rgba(110, 89, 165, 0.1)'
@@ -17,7 +19,8 @@ const MODELS = [
     id: 'rocket',
     name: 'Project Launch',
     description: 'Representing successful project deployments',
-    path: 'https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/rocket/model.gltf',
+    path: '/models/rocket.glb', // Local path (this is a placeholder, will use fallback)
+    fallbackShape: 'torus' as const,
     scale: 0.8,
     position: [0, -1, 0] as [number, number, number],
     bgColor: 'rgba(110, 89, 165, 0.05)'
@@ -26,8 +29,9 @@ const MODELS = [
     id: 'phone',
     name: 'Mobile Development',
     description: 'Responsive designs for all devices',
-    path: 'https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/iphone-x/model.gltf',
-    scale: 4,
+    path: '/models/phone.glb', // Local path (this is a placeholder, will use fallback)
+    fallbackShape: 'sphere' as const,
+    scale: 1,
     position: [0, 0, 0] as [number, number, number],
     bgColor: 'rgba(110, 89, 165, 0.1)'
   }
@@ -67,6 +71,7 @@ const ThreeDShowcase: React.FC = () => {
                 position={model.position}
                 backgroundColor={model.bgColor}
                 height="250px"
+                fallbackShape={model.fallbackShape}
               />
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-2">{model.name}</h3>
