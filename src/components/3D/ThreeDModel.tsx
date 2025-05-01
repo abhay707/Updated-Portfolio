@@ -25,7 +25,10 @@ const SceneBackground = ({ type = 'stars', color = '#050816' }) => {
       {type === 'stars' && <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />}
       {type === 'clouds' && (
         <>
-          <Cloud count={10} radius={20} />
+          {/* Cloud component used correctly without count prop */}
+          <Cloud position={[0, 0, -15]} speed={0.4} opacity={0.7} />
+          <Cloud position={[10, 5, -10]} speed={0.2} opacity={0.5} />
+          <Cloud position={[-10, -5, -15]} speed={0.3} opacity={0.6} />
           <fog attach="fog" args={['#050816', 10, 50]} />
         </>
       )}
