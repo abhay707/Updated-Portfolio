@@ -10,7 +10,7 @@ const MODELS = [
     description: 'Interactive 3D model of a development workstation',
     path: 'https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/macbook/model.gltf',
     scale: 0.4,
-    position: [0, -0.5, 0],
+    position: [0, -0.5, 0] as [number, number, number],
     bgColor: 'rgba(110, 89, 165, 0.1)'
   },
   {
@@ -19,7 +19,7 @@ const MODELS = [
     description: 'Representing successful project deployments',
     path: 'https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/rocket/model.gltf',
     scale: 0.8,
-    position: [0, -1, 0],
+    position: [0, -1, 0] as [number, number, number],
     bgColor: 'rgba(110, 89, 165, 0.05)'
   },
   {
@@ -28,7 +28,7 @@ const MODELS = [
     description: 'Responsive designs for all devices',
     path: 'https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/iphone-x/model.gltf',
     scale: 4,
-    position: [0, 0, 0],
+    position: [0, 0, 0] as [number, number, number],
     bgColor: 'rgba(110, 89, 165, 0.1)'
   }
 ];
