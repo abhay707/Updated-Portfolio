@@ -36,12 +36,16 @@ function Model({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], fa
   const groupRef = useRef<Group>(null);
   const [hasError, setHasError] = useState(false);
   
-  // Fix: Using a try-catch block instead of a callback for error handling
+  // Enhanced error handling: we'll use both a try-catch and the onError option
   let gltf;
   try {
-    gltf = useGLTF(path);
+    // Use the new API format with onError option
+    gltf = useGLTF(path, undefined, (error) => {
+      console.error('GLTF loading error:', error);
+      setHasError(true);
+    });
   } catch (error) {
-    console.error('GLTF loading error:', error);
+    console.error('GLTF loading catch error:', error);
     return <ModelFallback shape={fallbackShape} />;
   }
   
