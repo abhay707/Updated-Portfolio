@@ -8,13 +8,15 @@ interface PageTransitionProps {
   background?: 'particles' | 'gradient' | 'none';
   color?: string;
   density?: number;
+  disableAnimation?: boolean;
 }
 
 const PageTransition: React.FC<PageTransitionProps> = ({ 
   children, 
   background = 'particles',
   color = '#9b87f5',
-  density = 100
+  density = 100,
+  disableAnimation = false
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -33,15 +35,19 @@ const PageTransition: React.FC<PageTransitionProps> = ({
         <div className="fixed inset-0 -z-10 bg-gradient-to-br from-background to-purple/5 opacity-70" />
       )}
       
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-        className="relative z-0"
-      >
-        {children}
-      </motion.div>
+      {!disableAnimation ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          className="relative z-0"
+        >
+          {children}
+        </motion.div>
+      ) : (
+        <div className="relative z-0">{children}</div>
+      )}
     </div>
   );
 };
