@@ -3,37 +3,40 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ThreeDModel from './ThreeDModel';
 
-// Updated models with fallbacks
+// Updated models with fallbacks and enhanced backgrounds
 const MODELS = [
   {
     id: 'laptop',
     name: 'Developer Laptop',
     description: 'Interactive 3D model of a development workstation',
-    path: '/models/laptop.glb', // Local path (this is a placeholder, will use fallback)
+    path: '/models/laptop.glb', // Local path (will use fallback if not available)
     fallbackShape: 'box' as const,
     scale: 0.4,
     position: [0, -0.5, 0] as [number, number, number],
-    bgColor: 'rgba(110, 89, 165, 0.1)'
+    bgColor: 'rgba(110, 89, 165, 0.1)',
+    backgroundType: 'stars' as const
   },
   {
     id: 'rocket',
     name: 'Project Launch',
     description: 'Representing successful project deployments',
-    path: '/models/rocket.glb', // Local path (this is a placeholder, will use fallback)
+    path: '/models/rocket.glb', // Local path (will use fallback if not available)
     fallbackShape: 'torus' as const,
     scale: 0.8,
     position: [0, -1, 0] as [number, number, number],
-    bgColor: 'rgba(110, 89, 165, 0.05)'
+    bgColor: 'rgba(110, 89, 165, 0.05)',
+    backgroundType: 'clouds' as const
   },
   {
     id: 'phone',
     name: 'Mobile Development',
     description: 'Responsive designs for all devices',
-    path: '/models/phone.glb', // Local path (this is a placeholder, will use fallback)
+    path: '/models/phone.glb', // Local path (will use fallback if not available)
     fallbackShape: 'sphere' as const,
     scale: 1,
     position: [0, 0, 0] as [number, number, number],
-    bgColor: 'rgba(110, 89, 165, 0.1)'
+    bgColor: 'rgba(110, 89, 165, 0.1)',
+    backgroundType: 'minimal' as const
   }
 ];
 
@@ -65,14 +68,17 @@ const ThreeDShowcase: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <ThreeDModel 
-                modelPath={model.path}
-                scale={model.scale}
-                position={model.position}
-                backgroundColor={model.bgColor}
-                height="250px"
-                fallbackShape={model.fallbackShape}
-              />
+              <div className="aspect-square">
+                <ThreeDModel 
+                  modelPath={model.path}
+                  scale={model.scale}
+                  position={model.position}
+                  backgroundColor={model.bgColor}
+                  height="100%"
+                  fallbackShape={model.fallbackShape}
+                  backgroundType={model.backgroundType}
+                />
+              </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-2">{model.name}</h3>
                 <p className="text-gray-600 dark:text-gray-400">{model.description}</p>
