@@ -16,6 +16,7 @@ import {
 } from '@react-three/drei';
 import { Group, TextureLoader, DoubleSide } from 'three';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useToast } from '@/hooks/use-toast';
 
 // Add a background component for 3D scenes
 const SceneBackground = ({ type = 'stars', color = '#050816' }) => {
@@ -92,22 +93,60 @@ interface ModelProps {
 function Model({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], fallbackShape = 'box' }: ModelProps) {
   const groupRef = useRef<Group>(null);
   const [hasError, setHasError] = useState(false);
+  const toast = useToast();
   
-  let gltf;
-  try {
-    // Using correct pattern for useGLTF - it doesn't accept an error callback
-    gltf = useGLTF(path);
-  } catch (error) {
-    console.error('GLTF loading error:', error);
-    return <ModelFallback shape={fallbackShape} />;
-  }
-
-  // If the model loaded but is invalid, use the fallback
+  // Using try/catch with useState for error handling
+  const [model, setModel] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  
+  // Load model with proper error handling
   useEffect(() => {
-    if (!gltf || !gltf.scene) {
-      setHasError(true);
-    }
-  }, [gltf]);
+    const loadModel = async () => {
+      try {
+        setLoading(true);
+        console.log(`Loading model from path: ${path}`);
+        
+        // Check if the path is valid before loading
+        if (!path || path === '') {
+          throw new Error('Model path is empty');
+        }
+        
+        const gltf = await useGLTF.load(path, undefined, (error) => {
+          console.error('GLTF loading error:', error);
+          setHasError(true);
+          toast({
+            title: "Failed to load 3D model",
+            description: `Using fallback for ${path.split('/').pop()}`,
+            variant: "destructive",
+          });
+        });
+        
+        if (!gltf || !gltf.scene) {
+          throw new Error('Invalid GLTF model');
+        }
+        
+        setModel(gltf);
+        console.log(`Model loaded successfully: ${path}`);
+      } catch (error) {
+        console.error('Model loading error:', error);
+        setHasError(true);
+        toast({
+          title: "Failed to load 3D model",
+          description: "Using placeholder shape instead",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadModel();
+    
+    // Cleanup function
+    return () => {
+      useGLTF.clear(path);
+    };
+  }, [path, toast]);
   
   useFrame(({ clock }) => {
     if (groupRef.current) {
@@ -115,13 +154,15 @@ function Model({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], fa
     }
   });
 
-  if (hasError) {
+  // Show fallback if loading failed
+  if (hasError || !model) {
+    console.log(`Showing fallback for ${path}:`, fallbackShape);
     return <ModelFallback shape={fallbackShape} />;
   }
 
   return (
     <group ref={groupRef} position={position} rotation={rotation} scale={scale}>
-      <primitive object={gltf.scene} />
+      <primitive object={model.scene} />
     </group>
   );
 }

@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import ThreeDModel from './ThreeDModel';
+import { useToast } from '@/hooks/use-toast';
 
 // Updated models with fallbacks and enhanced backgrounds
 const MODELS = [
@@ -41,6 +42,16 @@ const MODELS = [
 ];
 
 const ThreeDShowcase: React.FC = () => {
+  const toast = useToast();
+  
+  React.useEffect(() => {
+    // Informational toast about 3D models
+    toast({
+      title: "3D Models Loading",
+      description: "You can interact with models by dragging to rotate",
+    });
+  }, [toast]);
+  
   return (
     <section id="3d-showcase" className="py-16">
       <div className="container mx-auto">
