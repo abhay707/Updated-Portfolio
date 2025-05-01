@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, useGLTF, Environment, Float } from '@react-three/drei';
-import { Mesh, Group } from 'three';
+import { Group } from 'three';
 
 interface ModelProps {
   path: string;
@@ -68,4 +68,3 @@ const ThreeDModel: React.FC<ThreeDModelProps> = ({
 };
 
 export default ThreeDModel;
-
