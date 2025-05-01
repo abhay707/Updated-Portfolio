@@ -42,7 +42,7 @@ const MODELS = [
 ];
 
 const ThreeDShowcase: React.FC = () => {
-  const toast = useToast();
+  const { toast } = useToast();
   
   React.useEffect(() => {
     // Informational toast about 3D models

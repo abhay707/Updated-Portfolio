@@ -26,7 +26,6 @@ const SceneBackground = ({ type = 'stars', color = '#050816' }) => {
       {type === 'stars' && <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />}
       {type === 'clouds' && (
         <>
-          {/* Cloud component used correctly without count prop */}
           <Cloud position={[0, 0, -15]} speed={0.4} opacity={0.7} />
           <Cloud position={[10, 5, -10]} speed={0.2} opacity={0.5} />
           <Cloud position={[-10, -5, -15]} speed={0.3} opacity={0.6} />
@@ -93,7 +92,7 @@ interface ModelProps {
 function Model({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], fallbackShape = 'box' }: ModelProps) {
   const groupRef = useRef<Group>(null);
   const [hasError, setHasError] = useState(false);
-  const toast = useToast();
+  const { toast } = useToast();
   
   // Using try/catch with useState for error handling
   const [model, setModel] = useState<any>(null);
@@ -111,17 +110,18 @@ function Model({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], fa
           throw new Error('Model path is empty');
         }
         
-        const gltf = await useGLTF.load(path, undefined, (error) => {
-          console.error('GLTF loading error:', error);
-          setHasError(true);
-          toast({
-            title: "Failed to load 3D model",
-            description: `Using fallback for ${path.split('/').pop()}`,
-            variant: "destructive",
-          });
+        // Use the standard useGLTF hook in a way that allows us to catch errors
+        const gltf = await new Promise((resolve, reject) => {
+          try {
+            const result = useGLTF(path);
+            resolve(result);
+          } catch (error) {
+            console.error('GLTF loading error:', error);
+            reject(error);
+          }
         });
         
-        if (!gltf || !gltf.scene) {
+        if (!gltf || !(gltf as any).scene) {
           throw new Error('Invalid GLTF model');
         }
         
