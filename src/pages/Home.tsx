@@ -1,12 +1,11 @@
-
 import React, { useEffect, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import HomeImg from '../Img/Home1.jpg';
 import PageTransition from '@/components/PageTransition';
-import ThreeDShowcase from '@/components/3D/ThreeDShowcase';
+import InteractivePortfolioShowcase from '@/components/InteractivePortfolioShowcase';
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
@@ -278,7 +277,7 @@ const Home = () => {
   return (
     <PageTransition background="particles" density={120}>
       <Hero />
-      <ThreeDShowcase />
+      <InteractivePortfolioShowcase />
       <AboutPreview />
       <ProjectsPreview />
       <ContactPreview />
