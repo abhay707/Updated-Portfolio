@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import HomeImg from '../Img/Home1.jpg';
 import PageTransition from '@/components/PageTransition';
+import MusicPlayer from '@/components/MusicPlayer';
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
@@ -279,6 +280,7 @@ const Home = () => {
       <AboutPreview />
       <ProjectsPreview />
       <ContactPreview />
+      <MusicPlayer />
     </PageTransition>
   );
 };

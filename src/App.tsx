@@ -22,8 +22,6 @@ import Certificates from "./pages/Certificates";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
-import Testimonials from "./pages/Testimonials";
-import Blog from "./pages/Blog";
 
 const queryClient = new QueryClient();
 
@@ -45,8 +43,6 @@ const App = () => (
                   <Route path="/skills" element={<Skills />} />
                   <Route path="/experience" element={<Experience />} />
                   <Route path="/certificates" element={<Certificates />} />
-                  <Route path="/testimonials" element={<Testimonials />} />
-                  <Route path="/blog" element={<Blog />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="*" element={<NotFound />} />

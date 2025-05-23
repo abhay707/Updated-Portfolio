@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Menu, X, ChevronDown } from 'lucide-react';
@@ -46,8 +45,6 @@ const Navbar = () => {
     { name: 'Skills', path: '/skills' },
     { name: 'Experience', path: '/experience' },
     { name: 'Certificates', path: '/certificates' },
-    { name: 'Testimonials', path: '/testimonials' },
-    { name: 'Blog', path: '/blog' },
   ];
 
   const toggleMenu = () => {
