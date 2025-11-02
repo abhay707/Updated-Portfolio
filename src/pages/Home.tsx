@@ -155,13 +155,13 @@ const AboutPreview = () => {
             transition={{ duration: 0.6 }}
           >
             <p className="text-lg">
-              I'm a passionate Full Stack Developer with expertise in building modern web applications using React, Node.js, and other cutting-edge technologies.
+              I'm a Full Stack Developer who makes the web do cool things with React, Node.js, and too much coffee.
             </p>
             <p>
-              With 5+ years of professional experience, I enjoy crafting user-friendly interfaces and scalable backend solutions for clients ranging from startups to enterprise companies.
+              With 5+ years of experience, I build sleek frontends, solid backends, and occasionally fix bugs I swore weren’t mine.
             </p>
             <Button asChild>
-              <Link to="/about">Learn More About Me</Link>
+              <Link to="/about">Click to know more</Link>
             </Button>
           </motion.div>
           
@@ -214,7 +214,7 @@ const ProjectsPreview = () => {
     <section className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Recent Projects</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Projects</h2>
           <div className="w-20 h-1 bg-purple mx-auto"></div>
         </div>
         

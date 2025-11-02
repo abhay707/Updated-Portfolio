@@ -60,7 +60,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between py-4">
           <Link to="/" className="text-2xl font-bold text-purple hover:text-purple-light transition-colors">
-            DevPortfolio
+            Portfolio
           </Link>
 
           {/* Desktop Navigation */}

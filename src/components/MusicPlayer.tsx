@@ -11,24 +11,45 @@ import { Button } from "@/components/ui/button";
 const SAMPLE_TRACKS = [
   {
     id: 1,
-    title: "Ambient Melody",
-    artist: "Abhay Chaturvedi",
-    file: "/music/ambient.mp3",
-    cover: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1"
+    title: "BADDERS",
+    artist: "PEEKABOO, Flowdan & Skrillex",
+    file: "/src/music/Music_1.mp3", // Placeholder path
+    cover: "/src/Img/Music/Music_1_Cover.jpg"
   },
   {
     id: 2,
-    title: "Calm Waters",
-    artist: "Abhay Chaturvedi",
-    file: "/music/ambient.mp3", // Using same file as placeholder
-    cover: "https://images.unsplash.com/photo-1501286353178-1ec881214838"
+    title: "Wrath",
+    artist: "Freddie Dredd",
+    file: "/src/music/Music_2.mp3", // Using same file as placeholder
+    cover: "/src/Img/Music/Music_2_Cover.png"
   },
   {
     id: 3,
-    title: "Peaceful Mind",
-    artist: "Abhay Chaturvedi",
-    file: "/music/ambient.mp3", // Using same file as placeholder
-    cover: "https://images.unsplash.com/photo-1582562124811-c09040d0a901"
+    title: "Drop It Like It's Hot!",
+    artist: "Haarper & Luga",
+    file: "/src/music/Music_3.mp3", // Using same file as placeholder
+    cover: "/src/Img/Music/Music_3_Cover.png"
+  },
+  {
+    id: 4,
+    title: "9mm",
+    artist: "Memphis Cult, Groove Dealers & SPLYXER",
+    file: "/src/music/Music_4.mp3", // Using same file as placeholder
+    cover: "/src/Img/Music/Music_4_Cover.png"
+  },
+  {
+    id: 5,
+    title: "Rave",
+    artist: "Lane 8",
+    file: "/src/music/Music_5.mp3", // Using same file as placeholder
+    cover: "/src/Img/Music/Music_5_Cover.png"
+  },
+  {
+    id: 6,
+    title: "Feel",
+    artist: "Misanthrop",
+    file: "/src/music/Music_6.mp3", // Using same file as placeholder
+    cover: "/src/Img/Music/Music_6_Cover.png"
   }
 ];
 

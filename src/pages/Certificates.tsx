@@ -23,11 +23,11 @@ const Certificates = () => {
   const certificates: Certificate[] = [
     {
       id: 1,
-      title: "Web Development Bootcamp",
-      issuer: "Udemy",
-      date: "May 2023",
-      credentialId: "UC-123456",
-      credentialURL: "https://udemy.com/certificate/UC-123456",
+      title: "Algorithms on Strings",
+      issuer: "Coursera",
+      date: "Feb 2024",
+      credentialId: "J9JUVWG9VAVA",
+      credentialURL: "https://www.coursera.org/account/accomplishments/verify/J9JUVWG9VAVA",
       description: "Full-stack web development using React, Node.js, and MongoDB",
       category: "technical"
     },
