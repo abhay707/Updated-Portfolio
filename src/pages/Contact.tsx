@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import PageTransition from '@/components/PageTransition';
 import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,6 +58,7 @@ const Contact = () => {
   }
 
   return (
+    <PageTransition background="particles">
     <div className="pt-24 pb-16">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
@@ -280,6 +282,7 @@ const Contact = () => {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 };
 

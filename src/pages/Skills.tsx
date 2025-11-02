@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Progress } from '@/components/ui/progress';
+import PageTransition from '@/components/PageTransition';
 
 interface SkillCategory {
   title: string;
@@ -133,6 +134,7 @@ const Skills = () => {
   };
 
   return (
+    <PageTransition background="particles" >
     <div className="pt-24 pb-16">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
@@ -200,6 +202,7 @@ const Skills = () => {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 };
 

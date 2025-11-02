@@ -5,6 +5,7 @@ import Pong from "../Img/Projects/Pong.jpg";
 import FitnessApp from "../Img/Projects/Fitness.jpg";
 import Event from "../Img/Projects/Event.jpg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PageTransition from '@/components/PageTransition';
 
 interface Project {
   id: number;
@@ -176,6 +177,7 @@ const Projects = () => {
       : projectsData.filter((project) => project.category === activeTab);
 
   return (
+    <PageTransition background="particles" >
     <div className="pt-24 pb-16">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
@@ -247,6 +249,7 @@ const Projects = () => {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 };
 

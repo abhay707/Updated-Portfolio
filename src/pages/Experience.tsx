@@ -159,7 +159,7 @@ const Experience = () => {
   };
 
   return (
-    <PageTransition background="particles" color="#33C3F0">
+    <PageTransition background="particles" >
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
